@@ -8,7 +8,12 @@ from fontTools.svgLib.path import parse_path
 from fontTools.feaLib.builder import addOpenTypeFeaturesFromString
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output',type=Path,default=Path(__file__).resolve().parents[1]/'fonts/ttf/CordovaHand-Regular.ttf')
+parser.add_argument('--mixed-case',action='store_true',help='Build Cordova Hand Text with the original lowercase forms.')
 args=parser.parse_args()
+if args.mixed_case and args.output.name=='CordovaHand-Regular.ttf':args.output=args.output.with_name('CordovaHandText-Regular.ttf')
+family='Cordova Hand Text' if args.mixed_case else 'Cordova Hand'
+font_name='CordovaHandText-Regular' if args.mixed_case else 'CordovaHand-Regular'
+version='1.003' if args.mixed_case else '1.002'
 # 76-unit strokes, up from 64: a small weight increase with unchanged centerlines,
 # advance widths, kerning, and vertical metrics.
 STROKE_RADIUS=38
@@ -229,7 +234,7 @@ for c,svg in [('¨','M163 787 L164 784 M328 787 L329 784'),('´','M130 650 L248 
 # matching authored capitals so UIKit labels, web canvases and 3D text agree while
 # stored/localized/accessibility strings keep their original spelling.
 capital_mappings={}
-for code in list(cmap):
+for code in ([] if args.mixed_case else list(cmap)):
  char=chr(code);upper=char.upper()
  if char==upper:continue
  if len(upper)==1 and ord(upper) in cmap:
@@ -242,19 +247,19 @@ for code in list(cmap):
   make(char,paths,cursor-75);capital_mappings[char]=upper
 order=list(glyphs);fb=FontBuilder(1000,isTTF=True);fb.setupGlyphOrder(order);fb.setupCharacterMap(cmap);fb.setupGlyf(glyphs)
 fb.setupHorizontalMetrics(metrics);fb.setupHorizontalHeader(ascent=980,descent=-320,lineGap=0)
-fb.setupNameTable({'familyName':'Cordova Hand','styleName':'Regular','uniqueFontIdentifier':'CordovaHand-Regular-1.002','fullName':'Cordova Hand Regular','psName':'CordovaHand-Regular','version':'Version 1.002','copyright':'Copyright 2026 Andrew White. Original lettering.','description':'Original handwritten game UI lettering. Medium-weight capitals-only UI edition.','licenseDescription':'This Font Software is licensed under the SIL Open Font License, Version 1.1.','licenseInfoURL':'https://openfontlicense.org/'})
-fb.setupOS2(version=4,sTypoAscender=980,sTypoDescender=-320,sTypoLineGap=0,usWinAscent=980,usWinDescent=320,sxHeight=700,sCapHeight=700,usWeightClass=450,fsType=0,fsSelection=0xC0)
+fb.setupNameTable({'familyName':family,'styleName':'Regular','uniqueFontIdentifier':font_name+'-'+version,'fullName':family+' Regular','psName':font_name,'version':'Version '+version,'copyright':'Copyright 2026 Andrew White. Original lettering.','description':'Handwritten UI lettering with original lowercase forms.' if args.mixed_case else 'Original handwritten game UI lettering. Medium-weight capitals-only UI edition.','licenseDescription':'This Font Software is licensed under the SIL Open Font License, Version 1.1.','licenseInfoURL':'https://openfontlicense.org/'})
+fb.setupOS2(version=4,sTypoAscender=980,sTypoDescender=-320,sTypoLineGap=0,usWinAscent=980,usWinDescent=320,sxHeight=470 if args.mixed_case else 700,sCapHeight=700,usWeightClass=450,fsType=0,fsSelection=0xC0)
 fb.setupPost();fb.setupMaxp();font=fb.font
 pairs={'AV':-48,'AW':-40,'AY':-40,'AT':-34,'FA':-26,'LT':-38,'LV':-40,'LY':-43,'PA':-30,'TA':-35,'To':-50,'Ta':-45,'Te':-42,'Ty':-25,'VA':-45,'Vo':-28,'WA':-35,'Wo':-22,'YA':-44,'Yo':-50,'Ye':-40,'Ya':-46,'rt':-10}
 # Lowercase cmap aliases must share capital kerning; prefer authored capital pairs.
 capital_pairs={}
 for pair,value in pairs.items():capital_pairs.setdefault(pair.upper(),value)
-pairs=capital_pairs
+pairs=pairs if args.mixed_case else capital_pairs
 fea='languagesystem DFLT dflt; languagesystem latn dflt; feature kern {\n'+''.join(f'pos uni{ord(a):04X} uni{ord(b):04X} {n};\n' for (a,b),n in pairs.items())+'} kern;'
 addOpenTypeFeaturesFromString(font,fea)
 # Fixed timestamps make repeated authoring byte-for-byte reproducible.
 font['head'].created=font['head'].modified=3872102400;font.recalcTimestamp=False
 args.output.parent.mkdir(parents=True,exist_ok=True)
 font.save(args.output)
-report={'family':'Cordova Hand','glyphs':len(glyphs),'characters':len(cmap),'kerningPairs':len(pairs),'missingASCII':[chr(i) for i in range(32,127) if i not in cmap],'missingLatin1':[chr(i) for i in range(160,256) if i not in cmap],'scripts':'Latin; system fallback for other scripts','strokeWidth':STROKE_RADIUS*2, 'version':'1.002', 'capitalMappings':len(capital_mappings)}
+report={'family':family,'glyphs':len(glyphs),'characters':len(cmap),'kerningPairs':len(pairs),'missingASCII':[chr(i) for i in range(32,127) if i not in cmap],'missingLatin1':[chr(i) for i in range(160,256) if i not in cmap],'scripts':'Latin; system fallback for other scripts','strokeWidth':STROKE_RADIUS*2, 'version':version, 'capitalMappings':len(capital_mappings)}
 print(json.dumps(report))

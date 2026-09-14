@@ -19,3 +19,14 @@ for font in fonts:
 assert fonts[0].getBestCmap()==fonts[1].getBestCmap()
 assert fonts[0]['hmtx'].metrics==fonts[1]['hmtx'].metrics
 print('TTF and WOFF2: metadata, capitals, accents, spacing and 325-character coverage passed.')
+
+textFonts=[TTFont(root/p) for p in ['fonts/ttf/CordovaHandText-Regular.ttf','fonts/woff2/CordovaHandText-Regular.woff2']]
+for f in textFonts:
+ assert f['name'].getDebugName(1)=='Cordova Hand Text'
+ assert f['name'].getDebugName(6)=='CordovaHandText-Regular'
+ assert len(f.getBestCmap())==325
+ for lower in 'abcdefghijklmnopqrstuvwxyz':assert f.getBestCmap()[ord(lower)]!=f.getBestCmap()[ord(lower.upper())]
+ assert f['OS/2'].sxHeight==470
+assert textFonts[0].getBestCmap()==textFonts[1].getBestCmap()
+assert textFonts[0]['hmtx'].metrics==textFonts[1]['hmtx'].metrics
+print('Mixed-case TTF and WOFF2: original lowercase, metadata, metrics and coverage passed.')
