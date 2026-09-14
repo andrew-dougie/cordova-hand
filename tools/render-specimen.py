@@ -12,7 +12,6 @@ def line(text,x,y,size,color):
   paths.append(f'<path fill="{color}" d="{pen.getCommands()}" transform="translate({x+cursor*scale:.3f} {y}) scale({scale} {-scale})"/>')
   cursor+=font['hmtx'][name][0]
 line('Cordova Hand',64,166,122,'#ffdd8d')
-line('Original lettering. A little unruly.',70,207,30,'#c6b4cd')
 line('Play    Resume    Try again',70,305,55,'#fff1d2')
 line('Return to main menu',70,383,57,'#8de2a1')
 line('New high score!    12,345',70,455,49,'#89caff')
