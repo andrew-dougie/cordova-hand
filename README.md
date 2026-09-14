@@ -2,9 +2,9 @@
 
 A handwritten font with irregular strokes, proportional letters, and tabular numerals. Two editions are included: **Cordova Hand Text** with uppercase and lowercase, and **Cordova Hand** with capitals-only lettering. Both ship as TTF and WOFF2.
 
-![Cordova Hand specimen: uneven hand-drawn capitals, menu options, alphabet, numbers and accented letters](docs/specimen.svg)
+![Cordova Hand specimen using an excerpt from Blood Meridian](docs/specimen.svg)
 
-![Cordova Hand Text specimen with the original lowercase forms](docs/specimen-text.svg)
+![Cordova Hand Text specimen using the same excerpt in mixed case](docs/specimen-text.svg)
 
 ## Download
 
@@ -87,7 +87,7 @@ Add `CordovaHandText-Regular.ttf` to your target’s resources and list the file
 ```swift
 let font = UIFont(name: "CordovaHandText-Regular", size: 28)
 label.font = font
-label.text = "Return to main menu"
+label.text = "His feet are light and nimble."
 ```
 
 Use `CordovaHand-Regular` for the capitals-only edition. Dynamic Type sizing and accessible labels remain the app’s responsibility.
@@ -108,6 +108,6 @@ python tools/verify-font.py
 
 `tools/build-font.py` constructs the TrueType outlines, cmap, metrics, and kerning. `tools/package-font.py` also exports WOFF2 and the coverage manifest. Fixed font timestamps make builds reproducible with the pinned dependencies. The README specimen uses the shipped font’s actual outlines, so GitHub does not need to install or load a remote font.
 
-## License
+## Font license
 
 Copyright © 2026 Andrew White. Licensed under the **[SIL Open Font License 1.1](OFL.txt)**. You may use and embed it in personal or commercial projects, and redistribute or modify it under that license. No Reserved Font Names are declared.
