@@ -39,6 +39,25 @@ The font contains vector outlines. Pixelation, colors, shadows, and animation ar
 
 See the complete [character map](fonts/characters.json). Unsupported scripts require a fallback font.
 
+## Install with a coding assistant
+
+Copy this prompt into your coding assistant:
+
+```text
+Install Cordova Hand in this project using its existing framework and typography conventions.
+
+Download and bundle these files from release v1.003:
+- Mixed-case TTF: https://github.com/andrew-dougie/cordova-hand/releases/download/v1.003/CordovaHandText-Regular.ttf
+- Mixed-case WOFF2: https://github.com/andrew-dougie/cordova-hand/releases/download/v1.003/CordovaHandText-Regular.woff2
+- Capitals-only TTF: https://github.com/andrew-dougie/cordova-hand/releases/download/v1.003/CordovaHand-Regular.ttf
+- Capitals-only WOFF2: https://github.com/andrew-dougie/cordova-hand/releases/download/v1.003/CordovaHand-Regular.woff2
+- License: https://raw.githubusercontent.com/andrew-dougie/cordova-hand/v1.003/OFL.txt
+
+Use WOFF2 for web projects and TTF for native apps. Register the families as "Cordova Hand Text" (mixed case) and "Cordova Hand" (capitals only), normal style, weight 450. For iOS, include the TTF filenames in UIAppFonts and use PostScript names CordovaHandText-Regular and CordovaHand-Regular. Include OFL.txt with the font assets.
+
+Add reusable font definitions and a small preview using both editions. Verify the fonts load from bundled assets and that lowercase text displays normally in Cordova Hand Text and as capitals in Cordova Hand. Explain the changed files and how to apply each edition.
+```
+
 ## Use on the web
 
 Copy the WOFF2 beside your stylesheet:
