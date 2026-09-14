@@ -2,6 +2,8 @@
 
 A handwritten font with irregular strokes, proportional letters, and tabular numerals. Two editions are included: **Cordova Hand Text** with uppercase and lowercase, and **Cordova Hand** with capitals-only lettering. Both ship as TTF and WOFF2.
 
+I made this font for use in retro/2000s-style video games.
+
 ![Cordova Hand specimen using an excerpt from Blood Meridian](docs/specimen.svg)
 
 ![Cordova Hand Text specimen using the same excerpt in mixed case](docs/specimen-text.svg)
